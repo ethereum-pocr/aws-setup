@@ -65,46 +65,10 @@ sudo su - geth
 
 From now on, run commands as `geth` unless specified otherwise.
 
-## 5) Enable instance environment variables
+## 5) Continue with network-specific guide
 
-Append this block to `~/.bashrc`:
-
-```sh
-ENV_FILE="$HOME/.aws-instance-env"
-
-if [ -f "$ENV_FILE" ]; then
-    source "$ENV_FILE"
-else
-    $HOME/common/update-aws-instance-vars.sh
-fi
-```
-
-Then reload:
-
-```sh
-exit
-sudo su - geth
-cat ~/.aws-instance-env
-```
-
-## 6) Generate nodekey (required for sealer and rpc)
-
-```sh
-geth --datadir ~/.ethereum/
-# stop geth once it starts
-mv ~/.ethereum/geth/nodekey ~/.keystore/
-```
-
-## 7) Chain bootstrap strategy (recommended)
-
-Use both methods depending on availability:
-
-- Preferred: restore archived historical chain data from S3 for much faster startup
-- Fallback: initialize from genesis when no archive is available
-
-Each network guide includes both command paths.
-
-## 8) Continue with network-specific guide
+The next steps depend on network-specific files downloaded from S3.
+Complete one of the guides below from top to bottom.
 
 - For Kerleano: [README.kerleano.md](README.kerleano.md)
 - For PoCRnet: [README.pocrnet.md](README.pocrnet.md)

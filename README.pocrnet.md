@@ -37,7 +37,49 @@ chmod +x common/*.sh sealer/*.sh rpc/*.sh
 mkdir -p .keystore ~/.ethereum/geth
 ```
 
-## 2) Bootstrap chain data (archive first, genesis fallback)
+## 2) Enable instance environment variables
+
+Append this block to `~/.bashrc`:
+
+```sh
+ENV_FILE="$HOME/.aws-instance-env"
+
+if [ -f "$ENV_FILE" ]; then
+  source "$ENV_FILE"
+else
+  $HOME/common/update-aws-instance-vars.sh
+fi
+```
+
+Reload the shell and verify:
+
+```sh
+exit
+sudo su - geth
+cat ~/.aws-instance-env
+```
+
+## 3) Install geth binary
+
+```sh
+mkdir -p bin
+./common/download-geth.sh v1.10.26-pocr-2.0.0
+ln -sfn geth-v1.10.26-pocr-2.0.0 bin/geth
+```
+
+You can choose another release tag if needed.
+
+## 4) Generate nodekey (required for sealer and rpc)
+
+If `~/.keystore/nodekey` already exists, skip this step.
+
+```sh
+geth --datadir ~/.ethereum/
+# stop geth once it starts
+mv ~/.ethereum/geth/nodekey ~/.keystore/
+```
+
+## 5) Bootstrap chain data (archive first, genesis fallback)
 
 ### Preferred: restore archived historical chain data
 
@@ -61,16 +103,6 @@ fi
 
 `init-sealer.sh` uses `pocrnet.json` from `/chain` when present, otherwise it
 initializes directly from `common/pocrnet.json`.
-
-## 3) Install geth binary
-
-```sh
-mkdir -p bin
-./common/download-geth.sh v1.10.26-pocr-2.0.0
-ln -sfn geth-v1.10.26-pocr-2.0.0 bin/geth
-```
-
-You can choose another release tag if needed.
 
 ## Sealer node (PoCRnet)
 

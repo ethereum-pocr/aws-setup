@@ -5,7 +5,7 @@ DATADIR=~/.ethereum/
 KEYSTORE=~/.keystore
 NODEKEY=$KEYSTORE/nodekey
 PUBLIC_IP=${AWS_PUBLIC_IP:-$(curl https://checkip.amazonaws.com)}
-exec /chain/bin/geth --networkid 1804 \
+exec /chain/bin/geth --networkid 2606 \
     --datadir $DATADIR \
     --bootnodes $BOOTNODE \
     --nodekey $NODEKEY \
