@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-GENESIS_FILE="kerleano.json"
+GENESIS_FILE="pocrnet.json"
 COMMON_GENESIS="common/$GENESIS_FILE"
 GENESIS_PATH="$GENESIS_FILE"
 

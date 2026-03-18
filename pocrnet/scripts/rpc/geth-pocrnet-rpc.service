@@ -1,0 +1,22 @@
+[Unit]
+Description=Geth PoCRnet RPC Node
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=geth
+Group=geth
+WorkingDirectory=/chain
+ExecStart=/bin/bash /chain/rpc/start_rpc_node.sh
+Restart=on-failure
+RestartSec=10
+StandardOutput=append:/chain/geth.log
+StandardError=append:/chain/geth.log
+
+# Hardening
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
