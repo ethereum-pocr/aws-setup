@@ -87,6 +87,15 @@ guess_user() {
   esac
 }
 
+# Sort cache by instance name (case-insensitive) so menus are predictable.
+sort_cache_by_name() {
+  [ -f "$CACHE_FILE" ] || return 0
+  local tmp_sorted
+  tmp_sorted=$(mktemp)
+  LC_ALL=C sort -t',' -f -k1,1 -k3,3 -k2,2 "$CACHE_FILE" > "$tmp_sorted"
+  mv "$tmp_sorted" "$CACHE_FILE"
+}
+
 # Refresh cache from AWS
 refresh_cache() {
   echo ""
@@ -119,6 +128,7 @@ refresh_cache() {
   done
 
   mv "$tmp" "$CACHE_FILE"
+  sort_cache_by_name
   tput el 2>/dev/null
   printf "  ${GREEN}Cache updated${RESET} (%s instances)\n" "$(wc -l < "$CACHE_FILE" | tr -d ' ')"
 }
@@ -129,6 +139,8 @@ select_vm() {
     echo "Cache is empty. Run with 'refresh' first."
     exit 1
   fi
+
+  sort_cache_by_name
 
   local labels=()
   while IFS=',' read -r name ip region user key; do

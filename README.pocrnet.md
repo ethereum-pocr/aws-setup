@@ -49,6 +49,12 @@ if [ -f "$ENV_FILE" ]; then
 else
   $HOME/common/update-aws-instance-vars.sh
 fi
+
+# Add EC2 name to prompt using existing PS1 value (idempotent)
+case "$PS1" in
+  *'${AWS_INSTANCE_NAME:+['*) ;;
+  *) PS1="${PS1%\\$} \[\033[0;33m\]\${AWS_INSTANCE_NAME:+[\$AWS_INSTANCE_NAME]}\[\033[00m\]\\$ " ;;
+esac
 ```
 
 Reload the shell and verify:
